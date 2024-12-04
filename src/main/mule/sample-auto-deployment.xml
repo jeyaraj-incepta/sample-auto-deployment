@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6cecf23f-2153-41ab-9e3c-9c9093acb59e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="sample-auto-deploymentFlow" doc:id="6f445fe3-55b0-41e5-b917-b3621fdb8576" >
+		<http:listener doc:name="Listener" doc:id="4f0dca40-4e14-4092-b85b-323446efb8f7" config-ref="HTTP_Listener_config" path="/api/sample-auto-deployment"/>
+		<logger level="INFO" doc:name="Logger" doc:id="86b7da08-6f8a-41f8-b8d9-240052536d45" message="Received request for sample auto deployment"/>
+		<ee:transform doc:name="Transform Message" doc:id="9c9cbc5f-760a-4b53-92cc-c7cc946114c6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "CI/CD auto deployment"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
